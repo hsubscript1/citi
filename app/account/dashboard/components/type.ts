@@ -1,0 +1,36 @@
+import { StaticImageData } from "next/image";
+
+// types/index.ts
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePicture?: string | StaticImageData;
+}
+
+export interface Transaction {
+  id: string;
+  type: 'debit' | 'credit';
+  description: string;
+  amount: number;
+  date: string;
+  category?: string;
+}
+
+export interface Account {
+  balance: number;
+  lastUpdated: string;
+  timeUpdated: string;
+  currency: string;
+   accountNumber: number;
+}
+
+export interface Card {
+  id: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+  cardHolder: string;
+  type: 'visa' | 'mastercard' | 'amex';
+}
