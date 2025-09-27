@@ -4,16 +4,17 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
 import Logo from "@/public/images/logo.png";
-import { FaLock, FaUser } from "react-icons/fa";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { usePersonalStore } from "@/app/store/usePersonalStore";
 
 const Sform = () => {
   const router = useRouter();
+  const { setSignupData } = usePersonalStore(); 
 
   const [formData, setFormData] = useState({
     fname: "",
@@ -25,91 +26,47 @@ const Sform = () => {
 
   const [passwordTyped, setPasswordTyped] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name === "password") {
-      setPasswordTyped(value.length > 0);
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "password") setPasswordTyped(value.length > 0);
   };
 
   const validateForm = () => {
     const { fname, lname, email, password, cpassword } = formData;
-
     if (!fname.trim() || !lname.trim() || !email.trim() || !password.trim()) {
       return "All fields are required.";
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return "Please enter a valid email address.";
-
-    if (password.length < 5)
-      return "Password must be at least 5 characters long.";
-
+    if (!emailRegex.test(email)) return "Invalid email address.";
+    if (password.length < 5) return "Password must be at least 5 characters.";
     if (password !== cpassword) return "Passwords do not match.";
-
     return null;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const validationError = validateForm();
     if (validationError) {
       toast.error(validationError, { position: "top-right" });
       return;
     }
-
     setLoading(true);
 
-    try {
-      const res = await fetch("/api/signup-api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fname: formData.fname,
-          lname: formData.lname,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+    // ✅ Save only in Zustand, not DB yet
+    setSignupData({
+      fname: formData.fname,
+      lname: formData.lname,
+      email: formData.email,
+      password: formData.password,
+    });
 
-      const result = await res.json();
+    toast.success("Proceed to complete your profile", { position: "top-right" });
 
-      if (!res.ok) {
-        toast.error(result.error || "Signup failed", { position: "top-right" });
-      } else {
-        toast.success("Account created successfully! Redirecting...", {
-          position: "top-right",
-        });
-
-        setTimeout(() => router.push("/account/login"), 2000);
-
-        setFormData({
-          fname: "",
-          lname: "",
-          email: "",
-          password: "",
-          cpassword: "",
-        });
-        setPasswordTyped(false);
-      }
-    } catch (err) {
-      toast.error("Something went wrong. Please try again.", {
-        position: "top-right",
-      });
-    } finally {
-      setLoading(false);
-    }
+    setTimeout(() => router.push("/account/personalCredentials"), 2000);
   };
 
   return (
@@ -184,7 +141,6 @@ const Sform = () => {
           </div>
         </div>
 
-        {/* Password */}
         <div className="flex flex-col">
           <label htmlFor="password" className="mb-1 text-sm font-medium text-gray-700">
             Password
@@ -237,12 +193,12 @@ const Sform = () => {
           </div>
         )}
 
-        <button
+      <button
           type="submit"
           disabled={loading}
           className="w-full bg-[#03305c] text-white py-3 rounded-sm text-md font-medium transition disabled:opacity-50"
         >
-          {loading ? "Signing Up..." : "Sign Up"}
+          {loading ? "Processing..." : "Next"}
         </button>
 
         <p className="text-sm text-gray-600 text-center">

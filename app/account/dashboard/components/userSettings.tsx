@@ -4,12 +4,12 @@ import Image, { StaticImageData } from "next/image";
 import { supabase } from "@/app/store/supabase"; // ensure this is a named export
 
 interface UserSettingsProps {
-  user: User;
+  user: User | null;
   onUpdateUser: (user: User) => void;
 }
 
 const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
-  const [editedUser, setEditedUser] = React.useState<User>(user);
+  const [editedUser, setEditedUser] = React.useState<User | null>(user);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -21,15 +21,20 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editedUser) return;
     const { name, value } = e.target;
-    setEditedUser((prev) => ({ ...prev, [name]: value }));
+    setEditedUser((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
   const handleSave = () => {
-    onUpdateUser(editedUser);
+    if (editedUser) {
+      onUpdateUser(editedUser);
+    }
   };
 
   const getProfileDisplay = () => {
+    if (!user) return null;
+
     if (user.profilePicture) {
       if (typeof user.profilePicture === "string") {
         return (
@@ -51,8 +56,14 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
         );
       }
     }
-    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+
+    const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+    return <span className="text-2xl font-bold text-white">{initials}</span>;
   };
+
+  if (!editedUser) {
+    return <p className="text-gray-500">Loading user settings...</p>;
+  }
 
   return (
     <div className="mt-8 bg-white p-6 rounded-lg shadow">
@@ -60,7 +71,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
 
       <div className="space-y-6">
         <div className="flex items-center gap-6">
-          <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden">
             {getProfileDisplay()}
           </div>
           <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">

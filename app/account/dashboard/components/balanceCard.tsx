@@ -4,12 +4,11 @@ import { Account, User } from '../components/type';
 import Image, { StaticImageData } from 'next/image';
 import { FaArrowCircleUp, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { CiCirclePlus } from 'react-icons/ci';
-import { IoCopy } from 'react-icons/io5';
 import CopyAccountNumber from './customs/acc-copy';
 
 interface BalanceCardProps {
   account: Account;
-  user: User;
+  user: User | null;
 }
 
 const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
@@ -19,17 +18,16 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
 
   const profileSrc =
     user?.profilePicture &&
-    (typeof user.profilePicture === "string"
+    (typeof user.profilePicture === 'string'
       ? user.profilePicture
       : (user.profilePicture as StaticImageData));
 
-  const initials = `${user?.firstName?.[0] ?? ""}${
-    user?.lastName?.[0] ?? ""
-  }`.toUpperCase();
+  const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`.toUpperCase();
 
   return (
     <div className="bg-[rgb(3,48,92)] text-white md:p-6 p-5 rounded-lg shadow">
- <CopyAccountNumber accountNumber={account.accountNumber} currency={account.currency} />
+      <CopyAccountNumber accountNumber={account.accountNumber} currency={account.currency} />
+
       <div className="flex mx-auto justify-between">
         <div className="flex gap-3">
           <div>
@@ -50,7 +48,9 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
             )}
           </div>
           <div className="text-center mt-2 flex justify-center">
-            <h1 className="text-gray-400">Hi {user.firstName}</h1>
+            <h1 className="text-gray-400">
+              Hi {user ? user.firstName : 'Guest'}
+            </h1>
           </div>
         </div>
         <div className="md:flex flex-col hidden">
@@ -67,7 +67,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
             <p className="text-3xl font-bold text-white mt-2">
               {showAmount
                 ? `${account.currency} ${account.balance.toLocaleString()}`
-                : "****"}
+                : '****'}
             </p>
             <p className="text-gray-500 text-sm mt-2 md:hidden flex">
               Last Updated: {account.timeUpdated}
@@ -77,26 +77,23 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
             className="cursor-pointer text-xl mb-4 md:mb-0"
             onClick={toggleBalance}
           >
-            {showAmount ?<FaEye />  :<FaEyeSlash /> }
+            {showAmount ? <FaEye /> : <FaEyeSlash />}
           </div>
         </section>
       </div>
-      <div className='mt-4'>
-       <section className="flex justify-between items-center ">
-  <div className="flex flex-row bg-[#053464] px-2 py-1 items-center gap-1">
-    <FaArrowCircleUp size={24}  />
-    <button className=" text-white px-4 py-2">
-      Transfer
-    </button>
-  </div>
 
-  <div className="flex flex-row items-center gap-1 bg-[#053464] px-2 py-1">
-    <CiCirclePlus size={24} />
-    <button className=" text-white px-4 py-2 ">
-      Add Money
-    </button>
-  </div>
-</section>
+      <div className="mt-4">
+        <section className="flex justify-between items-center">
+          <div className="flex flex-row bg-[#053464] px-2 py-1 items-center gap-1">
+            <FaArrowCircleUp size={24} />
+            <button className=" text-white px-4 py-2">Transfer</button>
+          </div>
+
+          <div className="flex flex-row items-center gap-1 bg-[#053464] px-2 py-1">
+            <CiCirclePlus size={24} />
+            <button className=" text-white px-4 py-2 ">Add Money</button>
+          </div>
+        </section>
       </div>
     </div>
   );

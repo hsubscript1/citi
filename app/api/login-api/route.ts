@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { supabase } from "@/app/store/supabase"; 
+import jwt from "jsonwebtoken"; // install this: npm install jsonwebtoken
+import { supabase } from "@/app/store/supabase";
+
+const SECRET = process.env.JWT_SECRET!; // put a strong secret in .env
 
 export async function POST(req: Request) {
   try {
@@ -17,16 +20,22 @@ export async function POST(req: Request) {
       .single();
 
     if (error || !user) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
-    // Compare hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
     }
 
-    return NextResponse.json({ message: "Login successful", userId: user.id }, { status: 200 });
+    // ✅ issue token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      SECRET,
+      { expiresIn: "1h" } // expires in 1 hour
+    );
+
+    return NextResponse.json({ message: "Login successful", token }, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

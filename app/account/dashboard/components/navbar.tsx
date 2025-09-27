@@ -8,10 +8,11 @@ import { User } from "../components/type";
 
 import Image, { StaticImageData } from "next/image";
 interface NavbarProps {
+  user?: User | null;
   currentView: string;
-  user?: User;
   setCurrentView: (view: string) => void;
 }
+
 
 const Navbar: React.FC<NavbarProps> = ({
   user,

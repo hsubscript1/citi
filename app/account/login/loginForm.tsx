@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "@/public/images/logo.png";
 import Image from "next/image";
-import { FaLock, FaUser } from "react-icons/fa";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { useAppStore } from "@/app/store/useApp";
 
 const LoginForm = () => {
   const router = useRouter();
+  const { user, setUser, token, setToken, loginUser } = useAppStore(); 
 
   const [formData, setFormData] = useState({
     email: "",
@@ -21,6 +22,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -28,8 +30,7 @@ const LoginForm = () => {
       [name]: value,
     }));
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -39,17 +40,11 @@ const LoginForm = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/login-api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // 🔹 Use the store's login function instead of direct fetch
+      const result = await loginUser(formData.email, formData.password);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Invalid credentials", { position: "top-right" });
-        setLoading(false);
+      if (!result.success) {
+        toast.error(result.error || "Login failed", { position: "top-right" });
         return;
       }
 
@@ -125,7 +120,7 @@ const LoginForm = () => {
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
             >
-              {showPassword ? <FaEye /> :  <FaEyeSlash />}
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
             </button>
           </div>
         </div>

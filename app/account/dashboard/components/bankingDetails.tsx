@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { Transaction, Account, Card, User } from "./type";
@@ -9,10 +9,12 @@ import TransactionHistory from "./transactionalHis";
 import UserSettings from "./userSettings";
 import { useAppStore } from "@/app/store/useApp";
 import Layout from "../layout";
+import Transfer from "./transfer";
 
 const BankingDetails: React.FC = () => {
   const { user, currentView, setUser } = useAppStore();
 
+  // --- format helpers ---
   const formatCustomTime = (date: Date): string =>
     date.toLocaleTimeString("en-GB", { hour12: false });
 
@@ -28,6 +30,7 @@ const BankingDetails: React.FC = () => {
     return `${time}, ${dayName}, ${day} ${month} ${year}`;
   };
 
+  // --- account state ---
   const [account, setAccount] = useState<Account>({
     balance: 12560.75,
     lastUpdated: formatCustomDate(new Date()),
@@ -37,71 +40,53 @@ const BankingDetails: React.FC = () => {
   });
 
   useEffect(() => {
+    // keep lastUpdated fresh on mount
     setAccount((prev) => ({
       ...prev,
       lastUpdated: formatCustomDate(new Date()),
+      timeUpdated: formatCustomTime(new Date()),
     }));
   }, []);
 
+  // --- dummy transactions ---
   const [transactions] = useState<Transaction[]>([
-    {
-      id: "1",
-      type: "debit",
-      description: "Grocery Store",
-      amount: 85.2,
-      date: "2023-06-15T14:30:00",
-    },
-    {
-      id: "2",
-      type: "credit",
-      description: "Salary Deposit",
-      amount: 3500.0,
-      date: "2023-06-14T09:15:00",
-    },
-    {
-      id: "3",
-      type: "debit",
-      description: "Electric Bill",
-      amount: 120.5,
-      date: "2023-06-12T16:45:00",
-    },
-    {
-      id: "4",
-      type: "debit",
-      description: "Netflix Subscription",
-      amount: 15.99,
-      date: "2023-06-10T08:00:00",
-    },
-    {
-      id: "5",
-      type: "credit",
-      description: "Transfer from Alex",
-      amount: 250.0,
-      date: "2023-06-08T11:20:00",
-    },
+    { id: "1", type: "debit", description: "Grocery Store", amount: 85.2, date: "2023-06-15T14:30:00" },
+    { id: "2", type: "credit", description: "Salary Deposit", amount: 3500.0, date: "2023-06-14T09:15:00" },
+    { id: "3", type: "debit", description: "Electric Bill", amount: 120.5, date: "2023-06-12T16:45:00" },
+    { id: "4", type: "debit", description: "Netflix Subscription", amount: 15.99, date: "2023-06-10T08:00:00" },
+    { id: "5", type: "credit", description: "Transfer from Alex", amount: 250.0, date: "2023-06-08T11:20:00" },
   ]);
 
+  // --- card state ---
   const [card, setCard] = useState<Card>({
     id: "1",
     cardNumber: "4234567890123456",
     expiryDate: "12/25",
     cvv: "123",
-    cardHolder: `${user.firstName} ${user.lastName}`,
+    cardHolder: user ? `${user.firstName} ${user.lastName}` : "Card Holder",
     type: "visa",
   });
 
+  // Update card holder when user changes
+  useEffect(() => {
+    if (user) {
+      setCard((prev) => ({
+        ...prev,
+        cardHolder: `${user.firstName} ${user.lastName}`,
+      }));
+    }
+  }, [user]);
+
+  // --- handlers ---
   const handleActionSelect = (action: string) => {
     console.log(`Selected action: ${action}`);
   };
 
   const handleUpdateUser = (updatedUser: User) => {
     setUser(updatedUser);
-    setCard((prev) => ({
-      ...prev,
-      cardHolder: `${updatedUser.firstName} ${updatedUser.lastName}`,
-    }));
   };
 
+  // --- view renderer ---
   const renderCurrentView = () => {
     switch (currentView) {
       case "home":
@@ -111,11 +96,13 @@ const BankingDetails: React.FC = () => {
               <BalanceCard account={account} user={user} />
               <QuickActions onActionSelect={handleActionSelect} />
 
+              {/* Mobile */}
               <div className="mt-6 md:hidden flex flex-col gap-6">
                 <TransactionHistory transactions={transactions} />
                 <CreditCard card={card} />
               </div>
 
+              {/* Desktop */}
               <div className="mt-6 md:flex hidden flex-col gap-6">
                 <CreditCard card={card} />
               </div>
@@ -130,12 +117,10 @@ const BankingDetails: React.FC = () => {
       case "settings":
         return <UserSettings user={user} onUpdateUser={handleUpdateUser} />;
 
-      case "send":
+      case "spend":
         return (
-          <div className="mt-8 bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-600 mt-2">
-              Feature to send money coming soon.
-            </p>
+          <div className="mt-8">
+            <Transfer />
           </div>
         );
 
@@ -158,9 +143,6 @@ const BankingDetails: React.FC = () => {
       default:
         return (
           <div className="mt-8 bg-white p-6 rounded-lg shadow">
-            {/* <h2 className="text-2xl font-bold text-gray-800">
-              {currentView} View
-            </h2> */}
             <p className="text-gray-600 mt-2">This feature is coming soon!</p>
           </div>
         );
