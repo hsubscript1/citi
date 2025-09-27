@@ -23,8 +23,8 @@ export async function GET(req: Request) {
 
     const { data, error } = await supabase
       .from("citisignup")
-      .select("id, fname, lname, email, profilepicture, birthday, gender")
-      .eq("id", decoded.userId) // ✅ now fetch using verified userId
+      .select("id, fname, lname, email, profilepicture, birthday, gender, account_number, card_number,  account_balance")
+      .eq("id", decoded.userId) 
       .maybeSingle();
 
     if (error) {
@@ -44,6 +44,10 @@ export async function GET(req: Request) {
         profilePicture: data.profilepicture || "",
         birthday: data.birthday,
         gender: data.gender,
+        accountNumber: data.account_number || undefined,
+  accountBalance: data.account_balance,
+  cardNumber: data.card_number || undefined,
+  
       },
     });
   } catch (err) {

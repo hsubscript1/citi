@@ -4,7 +4,7 @@ import { supabase } from "@/app/store/supabase";
 
 export async function POST(req: Request) {
   try {
-    const { fname, lname, email, password, birthday, gender, pin, profilePicture } = await req.json();
+    const { fname, lname, email, password, birthday, gender, pin } = await req.json();
 
     if (!fname || !lname || !email || !password || !birthday || !gender || !pin) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -32,8 +32,7 @@ export async function POST(req: Request) {
           password: hashedPassword,
           birthday,
           gender,
-          pin,
-          profilePicture: profilePicture || "",
+          pin
         },
       ])
       .select();

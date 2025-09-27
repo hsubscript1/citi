@@ -32,15 +32,14 @@ const BankingDetails: React.FC = () => {
 
   // --- account state ---
   const [account, setAccount] = useState<Account>({
-    balance: 12560.75,
+    balance: user?.accountBalance,
     lastUpdated: formatCustomDate(new Date()),
     timeUpdated: formatCustomTime(new Date()),
     currency: "$",
-    accountNumber: 8078168064,
+    accountNumber: user?.accountNumber,
   });
 
   useEffect(() => {
-    // keep lastUpdated fresh on mount
     setAccount((prev) => ({
       ...prev,
       lastUpdated: formatCustomDate(new Date()),

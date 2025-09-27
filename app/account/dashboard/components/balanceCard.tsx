@@ -5,6 +5,7 @@ import Image, { StaticImageData } from 'next/image';
 import { FaArrowCircleUp, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { CiCirclePlus } from 'react-icons/ci';
 import CopyAccountNumber from './customs/acc-copy';
+import CustomerSupport from './customs/customerSupport';
 
 interface BalanceCardProps {
   account: Account;
@@ -26,7 +27,14 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
 
   return (
     <div className="bg-[rgb(3,48,92)] text-white md:p-6 p-5 rounded-lg shadow">
-      <CopyAccountNumber accountNumber={account.accountNumber} currency={account.currency} />
+{account.accountNumber ? (
+  <CopyAccountNumber 
+    accountNumber={account.accountNumber} 
+    currency={account.currency} 
+  />
+) : (
+  <CustomerSupport />
+)}
 
       <div className="flex mx-auto justify-between">
         <div className="flex gap-3">
@@ -66,7 +74,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
           <div>
             <p className="text-3xl font-bold text-white mt-2">
               {showAmount
-                ? `${account.currency} ${account.balance.toLocaleString()}`
+                ? `${account.currency} ${account.balance?.toLocaleString()}`
                 : '****'}
             </p>
             <p className="text-gray-500 text-sm mt-2 md:hidden flex">

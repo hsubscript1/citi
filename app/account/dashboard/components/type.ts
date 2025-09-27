@@ -2,11 +2,16 @@ import { StaticImageData } from "next/image";
 
 // types/index.ts
 export interface User {
-  id: string;
+   id: string;
   firstName: string;
   lastName: string;
   email: string;
   profilePicture?: string | StaticImageData;
+  birthday?: string;   
+  gender?: string;   
+   accountNumber?: string;     // bank account number
+  accountBalance: number;   
+  cardNumber?: string;    
 }
 
 export interface Transaction {
@@ -19,11 +24,11 @@ export interface Transaction {
 }
 
 export interface Account {
-  balance: number;
+  balance?: number;
   lastUpdated: string;
   timeUpdated: string;
   currency: string;
-   accountNumber: number;
+  accountNumber?: string;
 }
 
 export interface Card {

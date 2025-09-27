@@ -20,18 +20,6 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
     window.location.href = "/account/login";
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedUser) return;
-    const { name, value } = e.target;
-    setEditedUser((prev) => (prev ? { ...prev, [name]: value } : prev));
-  };
-
-  const handleSave = () => {
-    if (editedUser) {
-      onUpdateUser(editedUser);
-    }
-  };
-
   const getProfileDisplay = () => {
     if (!user) return null;
 
@@ -74,9 +62,6 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
           <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden">
             {getProfileDisplay()}
           </div>
-          <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
-            Change Photo
-          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,8 +71,8 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
               type="text"
               name="firstName"
               value={editedUser.firstName}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              readOnly
+              className="w-full p-3 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
             />
           </div>
 
@@ -97,8 +82,8 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
               type="text"
               name="lastName"
               value={editedUser.lastName}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              readOnly
+              className="w-full p-3 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
             />
           </div>
         </div>
@@ -109,18 +94,34 @@ const UserSettings: React.FC<UserSettingsProps> = ({ user, onUpdateUser }) => {
             type="email"
             name="email"
             value={editedUser.email}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            readOnly
+            className="w-full p-3 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
           />
         </div>
 
-        <div className="pt-4 border-t flex justify-between">
-          <button
-            onClick={handleSave}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Save Changes
-          </button>
+        <div>
+          <label className="block text-gray-700 mb-2">Birthday</label>
+          <input
+            type="text"
+            name="birthday"
+            value={editedUser.birthday || ""}
+            readOnly
+            className="w-full p-3 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Gender</label>
+          <input
+            type="text"
+            name="gender"
+            value={editedUser.gender || ""}
+            readOnly
+            className="w-full p-3 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+        </div>
+
+        <div className="pt-4 border-t flex justify-end">
           <button
             onClick={handleLogout}
             className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
