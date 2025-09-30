@@ -10,6 +10,9 @@ import UserSettings from "./userSettings";
 import { useAppStore } from "@/app/store/useApp";
 import Layout from "../layout";
 import Transfer from "./transfer";
+import TransactionHis from "./transactionalHis";
+import Electricity from "./Elect/electricity";
+import ElectricityForm from "./Elect/electricityForm";
 
 const BankingDetails: React.FC = () => {
   const { user, currentView, setUser } = useAppStore();
@@ -58,15 +61,14 @@ const BankingDetails: React.FC = () => {
 
   // --- card state ---
   const [card, setCard] = useState<Card>({
-    id: "1",
-    cardNumber: "4234567890123456",
-    expiryDate: "12/25",
+    id: `${user?.id}`,
+    cardNumber: `${user?.cardNumber}`,
+    expiryDate: "12/35",
     cvv: "123",
     cardHolder: user ? `${user.firstName} ${user.lastName}` : "Card Holder",
     type: "visa",
   });
 
-  // Update card holder when user changes
   useEffect(() => {
     if (user) {
       setCard((prev) => ({
@@ -76,16 +78,12 @@ const BankingDetails: React.FC = () => {
     }
   }, [user]);
 
-  // --- handlers ---
-  const handleActionSelect = (action: string) => {
-    console.log(`Selected action: ${action}`);
-  };
+
 
   const handleUpdateUser = (updatedUser: User) => {
     setUser(updatedUser);
   };
 
-  // --- view renderer ---
   const renderCurrentView = () => {
     switch (currentView) {
       case "home":
@@ -93,22 +91,20 @@ const BankingDetails: React.FC = () => {
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <BalanceCard account={account} user={user} />
-              <QuickActions onActionSelect={handleActionSelect} />
+              <QuickActions />
 
-              {/* Mobile */}
               <div className="mt-6 md:hidden flex flex-col gap-6">
-                <TransactionHistory transactions={transactions} />
+{user?.id && <TransactionHis userId={user.id} />}
                 <CreditCard card={card} />
               </div>
 
-              {/* Desktop */}
               <div className="mt-6 md:flex hidden flex-col gap-6">
                 <CreditCard card={card} />
               </div>
             </div>
 
             <div className="lg:col-span-1 md:flex hidden">
-              <TransactionHistory transactions={transactions} />
+{user?.id && <TransactionHis userId={user.id} />}
             </div>
           </div>
         );
@@ -116,10 +112,14 @@ const BankingDetails: React.FC = () => {
       case "settings":
         return <UserSettings user={user} onUpdateUser={handleUpdateUser} />;
 
+      case "electricity":
+        return <ElectricityForm />;
+
+     
       case "spend":
         return (
           <div className="mt-8">
-            <Transfer />
+            <Transfer  />
           </div>
         );
 
@@ -142,8 +142,7 @@ const BankingDetails: React.FC = () => {
       default:
         return (
           <div className="mt-8 bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-600 mt-2">This feature is coming soon!</p>
-          </div>
+404          </div>
         );
     }
   };

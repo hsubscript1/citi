@@ -12,7 +12,8 @@ const CreditCard: React.FC<CreditCardProps> = ({ card }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
+    <div className="bg-gradient-to-r from-blue-500 to-purple-600
+     p-6 rounded-xl shadow-lg text-white">
       <div className="flex justify-between items-start">
         <div>
           <p className="text-sm opacity-80">Card Holder</p>

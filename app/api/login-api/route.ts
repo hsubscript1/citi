@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"; // install this: npm install jsonwebtoken
+import jwt from "jsonwebtoken"; 
 import { supabase } from "@/app/store/supabase";
 
-const SECRET = process.env.JWT_SECRET!; // put a strong secret in .env
+const SECRET = process.env.JWT_SECRET!; 
 
 export async function POST(req: Request) {
   try {

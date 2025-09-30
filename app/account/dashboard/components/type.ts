@@ -12,6 +12,7 @@ export interface User {
    accountNumber?: string;     // bank account number
   accountBalance: number;   
   cardNumber?: string;    
+  pin: number;
 }
 
 export interface Transaction {

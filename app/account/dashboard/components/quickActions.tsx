@@ -2,12 +2,13 @@ import React from 'react';
 import { FaLightbulb, FaReceipt } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import { useAppStore } from '@/app/store/useApp';
 
-interface QuickActionsProps {
-  onActionSelect: (action: string) => void;
-}
 
-const QuickActions: React.FC<QuickActionsProps> = ({ onActionSelect }) => {
+
+const QuickActions = () => {
+        const { user, currentView, setUser, setCurrentView } = useAppStore();
+
   const actions = [
     { id: 'electricity', label: 'Electricity', icon: <FaLightbulb size={28} />
  },
@@ -26,7 +27,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onActionSelect }) => {
         {actions.map((action) => (
           <button
             key={action.id}
-            onClick={() => onActionSelect(action.id)}
+            onClick={() => setCurrentView(action.id)}
             className="flex flex-col items-center justify-center p-4 bg-gray-100 rounded-lg hover:bg-blue-100 transition-colors"
           >
             <span className="text-2xl mb-2 text-[#03305c]">{action.icon}</span>

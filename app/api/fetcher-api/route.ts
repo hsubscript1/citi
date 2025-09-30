@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
     const { data, error } = await supabase
       .from("citisignup")
-      .select("id, fname, lname, email, profilepicture, birthday, gender, account_number, card_number,  account_balance")
+      .select("id, fname, lname, email, profilepicture, birthday, gender, account_number, pin, card_number,  account_balance")
       .eq("id", decoded.userId) 
       .maybeSingle();
 
@@ -47,6 +47,7 @@ export async function GET(req: Request) {
         accountNumber: data.account_number || undefined,
   accountBalance: data.account_balance,
   cardNumber: data.card_number || undefined,
+  pin: data.pin
   
       },
     });

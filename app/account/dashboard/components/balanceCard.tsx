@@ -6,6 +6,7 @@ import { FaArrowCircleUp, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { CiCirclePlus } from 'react-icons/ci';
 import CopyAccountNumber from './customs/acc-copy';
 import CustomerSupport from './customs/customerSupport';
+import Link from 'next/link';
 
 interface BalanceCardProps {
   account: Account;
@@ -94,7 +95,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
         <section className="flex justify-between items-center">
           <div className="flex flex-row bg-[#053464] px-2 py-1 items-center gap-1">
             <FaArrowCircleUp size={24} />
-            <button className=" text-white px-4 py-2">Transfer</button>
+            <Link className=" text-white px-4 py-2" href={'/account/dashboard/transfer'}>Transfer</Link>
           </div>
 
           <div className="flex flex-row items-center gap-1 bg-[#053464] px-2 py-1">
