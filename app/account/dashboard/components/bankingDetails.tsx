@@ -13,6 +13,7 @@ import Transfer from "./transfer";
 import TransactionHis from "./transactionalHis";
 import Electricity from "./Elect/electricity";
 import ElectricityForm from "./Elect/electricityForm";
+import LoanPage from "./loan/loanPage";
 
 const BankingDetails: React.FC = () => {
   const { user, currentView, setUser } = useAppStore();
@@ -114,7 +115,8 @@ const BankingDetails: React.FC = () => {
 
       case "electricity":
         return <ElectricityForm />;
-
+case "loan":
+        return <LoanPage user={user}/>;
      
       case "spend":
         return (
