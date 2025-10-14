@@ -1,26 +1,12 @@
 import { create } from "zustand";
-import { User } from "@/app/account/dashboard/components/type";
+import { AppState } from ".";
 
-interface AppState {
-  user: User | null;
-  token: string | null;
-  currentView: string;
-  setCurrentView: (view: string) => void;
-  setUser: (user: User | null) => void;
-  setToken: (token: string | null) => void;
-  loginUser: (
-    email: string,
-    password: string
-  ) => Promise<{ success: boolean; error?: string }>;
-  logoutUser: () => void;
-}
 
 export const useAppStore = create<AppState>((set) => ({
   user: null,
   token: null,
   currentView: "home",
 
-  // 🔹 Actions
   setCurrentView: (view) => set({ currentView: view }),
   setUser: (user) => set({ user }),
   setToken: (token) => {
@@ -29,11 +15,9 @@ export const useAppStore = create<AppState>((set) => ({
     set({ token });
   },
 
-  // In your store (useAppStore)
 loginUser: async (email, password) => {
   try {
-    // 🔹 Use the correct API endpoint
-    const res = await fetch("/api/login-api", { // Changed from "/api/login"
+    const res = await fetch("/api/login-api", { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,11 +32,9 @@ loginUser: async (email, password) => {
 
     const token = data.token;
     
-    // 🔹 Update both token state and localStorage
     set({ token });
     localStorage.setItem("token", token);
 
-    // 🔹 Fetch user profile
     const profileRes = await fetch("/api/fetcher-api", {
       headers: { Authorization: `Bearer ${token}` },
     });

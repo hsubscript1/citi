@@ -28,11 +28,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid password" }, { status: 400 });
     }
 
-    // ✅ issue token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       SECRET,
-      { expiresIn: "1h" } // expires in 1 hour
+      { expiresIn: "1h" } 
     );
 
     return NextResponse.json({ message: "Login successful", token }, { status: 200 });

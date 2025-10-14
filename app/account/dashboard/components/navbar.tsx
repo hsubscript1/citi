@@ -14,20 +14,41 @@ interface NavbarProps {
   setCurrentView: (view: string) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ user, currentView, setCurrentView }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  user,
+  currentView,
+  setCurrentView,
+}) => {
   const profileSrc =
     user?.profilePicture &&
     (typeof user.profilePicture === "string"
       ? user.profilePicture
       : (user.profilePicture as StaticImageData));
 
-  const initials = `${user?.firstName?.[0] ?? ""}${user?.lastName?.[0] ?? ""}`.toUpperCase();
+  const initials = `${user?.firstName?.[0] ?? ""}${
+    user?.lastName?.[0] ?? ""
+  }`.toUpperCase();
 
   const menuItems = [
-    { id: "home", label: "Home", icon: <MdHome size={18} />, pat: "/account/dashboard" },
-    { id: "spend", label: "Spend", icon: <FaPaperPlane size={18} />, pat: "/account/dashboard/transfer" },
-    { id: "save", label: "Save", icon: <FaRegSave size={18} />, pat: "/account/dashboard/save" },
-    { id: "card", label: "Card", icon: <FaCreditCard size={18} /> }, // no pat here
+    {
+      id: "home",
+      label: "Home",
+      icon: <MdHome size={18} />,
+      pat: "/account/dashboard",
+    },
+    {
+      id: "spend",
+      label: "Spend",
+      icon: <FaPaperPlane size={18} />,
+      pat: "/account/dashboard/transfer",
+    },
+    {
+      id: "save",
+      label: "Save",
+      icon: <FaRegSave size={18} />,
+      pat: "/account/dashboard/save",
+    },
+    { id: "card", label: "Card", icon: <FaCreditCard size={18} /> }, 
   ];
 
   return (
@@ -48,7 +69,9 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, setCurrentView }) =>
                   onClick={() => setCurrentView(item.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors
                     hover:text-[#03305c] ${
-                      currentView === item.id ? "text-[#03305c]" : "text-gray-500"
+                      currentView === item.id
+                        ? "text-[#03305c]"
+                        : "text-gray-500"
                     }`}
                 >
                   {item.icon}
@@ -59,7 +82,9 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, setCurrentView }) =>
                   onClick={() => setCurrentView(item.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors cursor-pointer
                     hover:text-[#03305c] ${
-                      currentView === item.id ? "text-[#03305c]" : "text-gray-500"
+                      currentView === item.id
+                        ? "text-[#03305c]"
+                        : "text-gray-500"
                     }`}
                 >
                   {item.icon}

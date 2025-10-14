@@ -1,4 +1,3 @@
-// app/api/admin/set-balance/route.ts
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { supabase } from "@/app/store/supabase";
@@ -25,7 +24,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Balance cannot be negative" }, { status: 400 });
     }
 
-    // Update balance in database
     const { error } = await supabase
       .from("citisignup")
       .update({ account_balance: newBalance })

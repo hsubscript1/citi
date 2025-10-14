@@ -40,7 +40,6 @@ const LoginForm = () => {
 
     setLoading(true);
     try {
-      // 🔹 Use the store's login function instead of direct fetch
       const result = await loginUser(formData.email, formData.password);
 
       if (!result.success) {

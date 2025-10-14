@@ -1,12 +1,12 @@
-'use client';
-import React, { useState } from 'react';
-import { Account, User } from '../components/type';
-import Image, { StaticImageData } from 'next/image';
-import { FaArrowCircleUp, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { CiCirclePlus } from 'react-icons/ci';
-import CopyAccountNumber from './customs/acc-copy';
-import CustomerSupport from './customs/customerSupport';
-import Link from 'next/link';
+"use client";
+import React, { useState } from "react";
+import { Account, User } from "../components/type";
+import Image, { StaticImageData } from "next/image";
+import { FaArrowCircleUp, FaEye, FaEyeSlash } from "react-icons/fa";
+import { CiCirclePlus } from "react-icons/ci";
+import CopyAccountNumber from "./customs/acc-copy";
+import CustomerSupport from "./customs/customerSupport";
+import Link from "next/link";
 
 interface BalanceCardProps {
   account: Account;
@@ -20,22 +20,24 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
 
   const profileSrc =
     user?.profilePicture &&
-    (typeof user.profilePicture === 'string'
+    (typeof user.profilePicture === "string"
       ? user.profilePicture
       : (user.profilePicture as StaticImageData));
 
-  const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`.toUpperCase();
+  const initials = `${user?.firstName?.[0] ?? ""}${
+    user?.lastName?.[0] ?? ""
+  }`.toUpperCase();
 
   return (
     <div className="bg-[rgb(3,48,92)] text-white md:p-6 p-5 rounded-lg shadow">
-{account.accountNumber ? (
-  <CopyAccountNumber 
-    accountNumber={account.accountNumber} 
-    currency={account.currency} 
-  />
-) : (
-  <CustomerSupport />
-)}
+      {account.accountNumber ? (
+        <CopyAccountNumber
+          accountNumber={account.accountNumber}
+          currency={account.currency}
+        />
+      ) : (
+        <CustomerSupport />
+      )}
 
       <div className="flex mx-auto justify-between">
         <div className="flex gap-3">
@@ -58,7 +60,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
           </div>
           <div className="text-center mt-2 flex justify-center">
             <h1 className="text-gray-400">
-              Hi {user ? user.firstName : 'Guest'}
+              Hi {user ? user.firstName : "Guest"}
             </h1>
           </div>
         </div>
@@ -76,7 +78,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
             <p className="text-3xl font-bold text-white mt-2">
               {showAmount
                 ? `${account.currency} ${account.balance?.toLocaleString()}`
-                : '****'}
+                : "****"}
             </p>
             <p className="text-gray-500 text-sm mt-2 md:hidden flex">
               Last Updated: {account.timeUpdated}
@@ -95,7 +97,12 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ account, user }) => {
         <section className="flex justify-between items-center">
           <div className="flex flex-row bg-[#053464] px-2 py-1 items-center gap-1">
             <FaArrowCircleUp size={24} />
-            <Link className=" text-white px-4 py-2" href={'/account/dashboard/transfer'}>Transfer</Link>
+            <Link
+              className=" text-white px-4 py-2"
+              href={"/account/dashboard/transfer"}
+            >
+              Transfer
+            </Link>
           </div>
 
           <div className="flex flex-row items-center gap-1 bg-[#053464] px-2 py-1">

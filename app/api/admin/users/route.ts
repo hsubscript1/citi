@@ -13,16 +13,23 @@ export async function GET(req: Request) {
 
   try {
     const decoded = jwt.verify(token, SECRET) as { role: string };
-    if (decoded.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (decoded.role !== "admin")
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const { data, error } = await supabase
       .from("citisignup")
-      .select("id, fname, lname, email, account_balance, account_number, card_number");
+      .select(
+        "id, fname, lname, email, account_balance, account_number, card_number"
+      );
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error)
+      return NextResponse.json({ error: error.message }, { status: 500 });
 
     return NextResponse.json({ users: data });
   } catch {
-    return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Invalid or expired token" },
+      { status: 401 }
+    );
   }
 }

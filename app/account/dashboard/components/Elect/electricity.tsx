@@ -25,7 +25,6 @@ const Electricity: React.FC<ElectricityPillProps> = ({
 }) => {
   const isOverdue = new Date(dueDate) < new Date() && status === "unpaid";
 
-  // Share Functions
   const shareWhatsApp = () => {
     const message = encodeURIComponent("Here is my electricity receipt ⚡📄");
     window.open(`https://wa.me/?text=${message}`, "_blank");

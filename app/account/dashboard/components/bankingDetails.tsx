@@ -15,11 +15,12 @@ import Electricity from "./Elect/electricity";
 import ElectricityForm from "./Elect/electricityForm";
 import LoanPage from "./loan/loanPage";
 import InvestmentsPage from "./investment/investment";
+import Pay from "../pay/pay";
+import PayForm from "../pay/payForm";
 
 const BankingDetails: React.FC = () => {
   const { user, currentView, setUser } = useAppStore();
 
-  // --- format helpers ---
   const formatCustomTime = (date: Date): string =>
     date.toLocaleTimeString("en-GB", { hour12: false });
 
@@ -35,7 +36,6 @@ const BankingDetails: React.FC = () => {
     return `${time}, ${dayName}, ${day} ${month} ${year}`;
   };
 
-  // --- account state ---
   const [account, setAccount] = useState<Account>({
     balance: user?.accountBalance,
     lastUpdated: formatCustomDate(new Date()),
@@ -52,16 +52,8 @@ const BankingDetails: React.FC = () => {
     }));
   }, []);
 
-  // --- dummy transactions ---
-  const [transactions] = useState<Transaction[]>([
-    { id: "1", type: "debit", description: "Grocery Store", amount: 85.2, date: "2023-06-15T14:30:00" },
-    { id: "2", type: "credit", description: "Salary Deposit", amount: 3500.0, date: "2023-06-14T09:15:00" },
-    { id: "3", type: "debit", description: "Electric Bill", amount: 120.5, date: "2023-06-12T16:45:00" },
-    { id: "4", type: "debit", description: "Netflix Subscription", amount: 15.99, date: "2023-06-10T08:00:00" },
-    { id: "5", type: "credit", description: "Transfer from Alex", amount: 250.0, date: "2023-06-08T11:20:00" },
-  ]);
 
-  // --- card state ---
+
   const [card, setCard] = useState<Card>({
     id: `${user?.id}`,
     cardNumber: `${user?.cardNumber}`,
@@ -107,8 +99,7 @@ const BankingDetails: React.FC = () => {
 
             <div className="lg:col-span-1 md:flex hidden">
 {user?.id && <TransactionHis userId={user.id} />}
-            </div>
-          </div>
+            </div>          </div>
         );
 
       case "settings":
@@ -130,9 +121,7 @@ case "loan":
       case "pay":
         return (
           <div className="mt-8 bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-600 mt-2">
-              Feature to handle bills and payments coming soon.
-            </p>
+        <PayForm />
           </div>
         );
 

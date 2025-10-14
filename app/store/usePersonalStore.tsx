@@ -1,24 +1,7 @@
 import { create } from "zustand";
+import { PersonalStore } from ".";
 
-interface SignupData {
-  fname: string;
-  lname: string;
-  email: string;
-  password: string;
-}
 
-interface PersonalStore {
-  birthday: string;
-  gender: string;
-  pinValue: string[];
-  signupData: SignupData | null;
-  setBirthday: (val: string) => void;
-  setGender: (val: string) => void;
-  addPinDigit: (num: number) => void;
-  clearPin: () => void;
-  backspacePin: () => void;
-  setSignupData: (data: SignupData) => void;
-}
 
 export const usePersonalStore = create<PersonalStore>((set) => ({
   birthday: "",

@@ -33,12 +33,11 @@ export default function AdminLogin() {
         return;
       }
 
-      // Save admin token
       localStorage.setItem("admin_token", data.token);
       toast.success("Admin login successful!");
 
       setTimeout(() => {
-        router.push("/admin/dashboard"); // you can remove or keep for testing
+        router.push("/admin/dashboard"); 
       }, 1000);
     } catch (err) {
       console.error(err);

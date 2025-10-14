@@ -1,4 +1,3 @@
-// app/api/admin/update-account-details/route.ts 
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { supabase } from "@/app/store/supabase";
@@ -36,14 +35,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User ID is required" }, { status: 400 });
     }
 
-    // ✅ Keep only balance check
     if (account_balance < 0) {
       return NextResponse.json({ error: "Account balance cannot be negative" }, { status: 400 });
     }
 
     console.log("Updating Supabase for user:", userId);
     
-    // Update user in database (no other validations)
     const { data, error } = await supabase
       .from("citisignup")
       .update({ 

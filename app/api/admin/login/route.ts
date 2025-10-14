@@ -25,7 +25,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, adminUser.password);
     if (!isMatch) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
